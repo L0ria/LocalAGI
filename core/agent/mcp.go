@@ -76,8 +76,7 @@ func (m *mcpAction) Definition() types.ActionDefinition {
 		Name:        types.ActionDefinitionName(m.toolName),
 		Description: m.toolDescription,
 		Required:    m.inputSchema.Required,
-		//Properties:  ,
-		Properties: props,
+		Properties:  props,
 	}
 }
 
@@ -120,6 +119,7 @@ func (a *Agent) addTools(client *mcp.Client) (types.Actions, error) {
 			if err != nil {
 				xlog.Error("Failed to marshal input schema", "error", err.Error())
 			}
+			json.Unmarshal(dat, &props)
 
 			xlog.Debug("Input schema", "tool", t.Name, "schema", string(dat))
 
@@ -146,7 +146,6 @@ func (a *Agent) addTools(client *mcp.Client) (types.Actions, error) {
 	}
 
 	return generatedActions, nil
-
 }
 
 func (a *Agent) initMCPActions() error {
@@ -161,7 +160,7 @@ func (a *Agent) initMCPActions() error {
 		transport := http.NewHTTPClientTransport("/mcp")
 		transport.WithBaseURL(mcpServer.URL)
 		if mcpServer.Token != "" {
-			transport.WithHeader("Authorization", "Bearer "+mcpServer.Token)
+			transport.WithHeader("Authorization", "Bearer " + mcpServer.Token)
 		}
 
 		// Create a new client
