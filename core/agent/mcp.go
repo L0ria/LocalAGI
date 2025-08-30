@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 
-	mcp "github.com/metoro-io/mcp-golang"
-	"github.com/metoro-io/mcp-golang/transport/http"
-	stdioTransport "github.com/metoro-io/mcp-golang/transport/stdio"
+	mcp "https://github.com/mark3labs/mcp-go"
+	"https://github.com/mark3labs/mcp-go/transport/http"
+	stdioTransport "https://github.com/mark3labs/mcp-go/transport/stdio"
 	"github.com/mudler/LocalAGI/core/types"
 	"github.com/mudler/LocalAGI/pkg/stdio"
 	"github.com/mudler/LocalAGI/pkg/xlog"
@@ -77,7 +77,7 @@ func (m *mcpAction) Definition() types.ActionDefinition {
 		Description: m.toolDescription,
 		Required:    m.inputSchema.Required,
 		//Properties:  ,
-		Properties: props,
+		Properties:  props,
 	}
 }
 
@@ -120,7 +120,6 @@ func (a *Agent) addTools(client *mcp.Client) (types.Actions, error) {
 			if err != nil {
 				xlog.Error("Failed to marshal input schema", "error", err.Error())
 			}
-
 			xlog.Debug("Input schema", "tool", t.Name, "schema", string(dat))
 
 			// XXX: This is a wild guess, to verify (data types might be incompatible)
@@ -146,7 +145,6 @@ func (a *Agent) addTools(client *mcp.Client) (types.Actions, error) {
 	}
 
 	return generatedActions, nil
-
 }
 
 func (a *Agent) initMCPActions() error {
@@ -161,7 +159,7 @@ func (a *Agent) initMCPActions() error {
 		transport := http.NewHTTPClientTransport("/mcp")
 		transport.WithBaseURL(mcpServer.URL)
 		if mcpServer.Token != "" {
-			transport.WithHeader("Authorization", "Bearer "+mcpServer.Token)
+			transport.WithHeader("Authorization", "Bearer " + mcpServer.Token)
 		}
 
 		// Create a new client
